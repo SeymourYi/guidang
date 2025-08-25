@@ -15,7 +15,6 @@
     <div class="logo">
       <img :src="logo" alt="logo" class="logo-img" width="300" height="200">
     </div>
-    
     <!-- 底部操作栏 -->
     <div class="bottom-bar">
       <!-- 返回按钮 -->
@@ -26,6 +25,16 @@
           </svg>
         </span>
         返回
+      </div>
+      <div class="bottom-bar__list">
+        <div
+          v-for="(project, idx) in projects"
+          :key="project.id"
+          class="bottom-chip"
+          @click="selectProject(idx)"
+        >
+          <span class="bottom-chip__name">{{ project.name }}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -38,7 +47,17 @@ export default {
     return {
       logo: require('@/assets/svg/aito.svg'),
       massageVideo: require('@/assets/video/anmo.mp4'),
-      timeoutId: null
+      timeoutId: null,
+       projects: [
+        { 
+          id: 1, 
+          name: '9:00~12:00'
+        },
+        { 
+          id: 2, 
+          name: '14:00~17:00'
+        },
+      ]
     }
   },
   mounted() {
@@ -163,5 +182,58 @@ export default {
   align-items: center;
   justify-content: center;
   color: white;
+}
+.bottom-bar__list { 
+  flex: 1;
+  display: flex; 
+  overflow-x: visible; 
+  /* gap: 18px;  */
+  padding: 0 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.bottom-chip { 
+  flex: 1; 
+  display: inline-flex; 
+  align-items: center; 
+  /* gap: 10px;  */
+  padding: 5px 5px; 
+  min-width: 80px;
+  margin: 0 10px;
+  /* max-width: 150px; */
+  height: 70px;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.12); 
+  background: rgba(255,255,255,0.06); 
+  color: #fff; 
+  cursor: pointer; 
+  transition: transform .2s ease, background .2s ease, border-color .2s ease; 
+  min-height: 50px;
+}
+
+.bottom-chip:hover { 
+  transform: translateY(-2px); 
+  background: rgba(255,255,255,0.1); 
+}
+
+.bottom-chip.active { 
+  background: rgba(255,255,255,0.15); 
+  color: #fff; 
+  border-color: rgba(255,255,255,0.3); 
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+.bottom-chip__name { 
+  /* padding: 5px 0; */
+  font-size: 30px;
+  font-weight: 500; 
+  white-space: nowrap; 
+  text-align: center; 
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
