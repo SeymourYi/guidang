@@ -2,7 +2,7 @@
   <div class="area-page">
     <div class="background-video">
       <video 
-        :src="restaurantvideo"
+        :src="restaurantVideo"
         autoplay
         preload="auto"
         playsinline
@@ -27,6 +27,18 @@
         </span>
         返回
       </div>
+      
+      <!-- 项目选择列表 -->
+      <div class="bottom-bar__list">
+        <div
+          v-for="(project, idx) in projects"
+          :key="project.id"
+          class="bottom-chip"
+          @click="selectProject(idx)"
+        >
+          <span class="bottom-chip__name">{{ project.name }}</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -37,37 +49,26 @@ export default {
   data() {
     return {
       logo: require('@/assets/svg/aito.svg'),
-      restaurantvideo: require('@/assets/video/canting.mp4'),
-      timeoutId: null
+      restaurantVideo: require('@/assets/video/canting.mp4'),
+      projects: [
+        { 
+          id: 1, 
+          name: '预约中餐'
+        },
+        { 
+          id: 2, 
+          name: '预约晚餐'
+        }
+      ]
     }
   },
-  mounted() {
-    console.log('Component mounted, adding event listeners.');
-    this.resetTimer();
-    window.addEventListener('mousemove', () => this.resetTimer());
-    window.addEventListener('keydown', () => this.resetTimer());
-    window.addEventListener('touchstart', () => this.resetTimer());
-  },
-  beforeUnmount() {
-    // 清除事件监听
-    window.removeEventListener('mousemove', () => this.resetTimer());
-    window.removeEventListener('keydown', () => this.resetTimer());
-    window.removeEventListener('touchstart', () => this.resetTimer());
-  },
   methods: {
-    resetTimer() {
-      console.log('resetTimer called');
-      if (this.timeoutId) {
-        clearTimeout(this.timeoutId);
-      }
-      // 2 秒无操作返回首页
-      this.timeoutId = setTimeout(() => {
-        console.log('No activity detected, would navigate back now.');
-        this.$router.push('/');
-      }, 500000);
-    },
     goBack() {
       this.$router.push('/')
+    },
+    selectProject(index) {
+      // 项目选择功能保留但不切换视频
+      console.log('选择了项目:', this.projects[index].name);
     }
   }
 }
@@ -177,5 +178,71 @@ export default {
   align-items: center;
   justify-content: center;
   color: white;
+}
+
+/* 中间产品名称列表 */
+.bottom-bar__list { 
+  flex: 1;
+  display: flex; 
+  overflow-x: auto; 
+  /* gap: 18px;  */
+  padding: 0 16px;
+  scrollbar-width: none;
+  justify-content: flex-start;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+}
+
+.bottom-bar__list::-webkit-scrollbar { 
+  display: none; 
+}
+
+.bottom-bar__list > .bottom-chip:first-child { 
+  margin-left: 12px; 
+}
+
+.bottom-bar__list > .bottom-chip:last-child { 
+  margin-right: 12px; 
+}
+
+.bottom-chip { 
+  flex: 0 0 auto; 
+  display: inline-flex; 
+  align-items: center; 
+  gap: 14px; 
+  padding: 0 20px; 
+  min-width: 120px;
+  margin: 0 10px;
+  width: auto;
+  height: 80px;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.12); 
+  background: rgba(255,255,255,0.06); 
+  color: #fff; 
+  cursor: pointer; 
+  transition: transform .2s ease, background .2s ease, border-color .2s ease; 
+  min-height: 56px;
+  scroll-snap-align: center;
+}
+
+.bottom-chip:hover { 
+  transform: translateY(-2px); 
+  background: rgba(255,255,255,0.1); 
+}
+
+.bottom-chip.active { 
+  background: #ffffff; 
+  color: #000; 
+  border-color: #ffffff; 
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+}
+
+.bottom-chip__name { 
+  font-size: 32px; 
+  font-weight: 500; 
+  white-space: nowrap; 
+  text-align: center; 
+  width: 100%; 
 }
 </style>
