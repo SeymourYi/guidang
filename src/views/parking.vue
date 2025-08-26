@@ -13,7 +13,7 @@
     </div>
     
     <div class="logo">
-      <img :src="logo" alt="logo" class="logo-img" width="300" height="200">
+      <img :src="logo" alt="logo" class="logo-img" width="300" height="40">
     </div>
 
     <!-- 可左右滑动的主体区域 -->
@@ -35,7 +35,7 @@
     <!-- 底部操作栏 -->
     <div class="bottom-bar">
       <!-- 返回按钮 -->
-      <div class="bottom-nav-btn-back" @click="goBack">
+       <div class="bottom-nav-btn-back" @click="goBack">
         <span class="nav-icon">
           <svg viewBox="0 0 24 24" width="30" height="30">
             <path d="M15.5 19.5L8 12l7.5-7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -48,11 +48,15 @@
           v-for="(project, idx) in projects"
           :key="project.id"
           class="bottom-chip"
-          :class="{ active: idx === activeIndex }"
           @click="selectProject(idx)"
         >
+          <div>
+         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <img :src="require(`@/assets/svg/clock.svg`)"  class="svgclass" width="60" height="60">
+         </div>
           <span class="bottom-chip__name">{{ project.name }}</span>
         </div>
+          </div>
       </div>
     </div>
   </div>
@@ -273,22 +277,22 @@ export default {
 }
 
 .bottom-nav-btn-back {
-  font-size: 28px;
+  font-size: 36px;
   flex: 0 0 auto;
-  width: 120px;
-  height: 80px;
+  width: 150px;
+  height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: row;
+  flex-direction: column;
   gap: 6px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.12);
   color: #fff;
   cursor: pointer;
+  border: 1.5px solid rgba(255,255,255,0.2);
   transition: all 0.3s ease;
   position: relative;
-  font-family: 'SourceHanSansCN-Regular';
+  margin-right: 15px;
 }
 
 .bottom-nav-btn-back:hover {
@@ -323,7 +327,7 @@ export default {
   padding: 8px 12px; 
   min-width: 140px;               /* 保证时间文本能完整显示 */
   margin: 0 8px;
-  height: 70px;
+  height: 150px;
   justify-content: center;
   border: 1px solid rgba(255,255,255,0.12); 
   background: rgba(255,255,255,0.06); 
@@ -338,7 +342,10 @@ export default {
   transform: translateY(-2px); 
   background: rgba(255,255,255,0.1); 
 }
-
+.svgclass {
+  transition: all 0.3s ease;
+  margin-bottom: 10px;
+}
 .bottom-chip.active { 
   background: #ffffff; 
   color: #000; 
@@ -348,7 +355,7 @@ export default {
 }
 
 .bottom-chip__name { 
-  font-size: 24px;                /* 适当缩小字体，减少换行 */
+  font-size: 30px;                /* 适当缩小字体，减少换行 */
   font-weight: 500; 
   white-space: normal;            /* 允许换行以完整显示时间 */
   text-align: center; 

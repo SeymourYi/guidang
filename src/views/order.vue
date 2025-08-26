@@ -21,7 +21,7 @@
     
     <!-- 顶部导航栏 -->
      <div class="logo">
-      <img :src="logo" alt="logo" class="logo-img" width="300" height="200">
+      <img :src="logo" alt="logo" class="logo-img" width="300" height="40">
     </div>
     <!-- <div class="back-btn" @click="goBack" role="button" aria-label="返回上一页">
       <span class="icon" aria-hidden="true">
@@ -39,10 +39,7 @@
           <div class="product-slide">
             <video v-if="p.video" class="product-cover" :src="p.video" autoplay muted playsinline webkit-playsinline></video>
             <img v-else class="product-cover" :src="p.image" :alt="p.name" />
-            <!-- <div class="product-desc-card">
-              <div class="desc-title">{{ p.name }}</div>
-              <div class="desc-text">{{ p.description }}</div>
-            </div> -->
+           
           </div>
         </div>
       </div>
@@ -77,6 +74,9 @@
         role="button"
         :aria-current="idx === activeProductIndex ? 'true' : 'false'"
       >
+       <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <img :src="require(`@/assets/svg/${p.svgname}${idx === activeProductIndex ? '_black' : ''}.svg`)" class="svgclass" width="60" height="60">
+            </div>
         <span class="bottom-chip__name">{{ p.name }}</span>
       </div>
     </div>
@@ -85,9 +85,9 @@
     <div class="bottom-nav-btn"  ref="cartIcon">
     <!-- <div class="bottom-nav-btn" @click="showcar" ref="cartIcon"> -->
       <span class="nav-icon">
-        <svg viewBox="0 0 24 24" width="32" height="32">
-          <path d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 1.5M7 13v6a1 1 0 001 1h8a1 1 0 001-1v-6m-5-4v4m-2-2h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+     <svg class="prefix__icon" fill="#fff" viewBox="0 0 1028 1024" xmlns="http://www.w3.org/2000/svg" width="40" height="40">
+      <path d="M332.8 790.528q19.456 0 36.864 7.168t30.208 19.968 20.48 30.208 7.68 36.864-7.68 36.864-20.48 30.208-30.208 20.48-36.864 7.68q-20.48 0-37.888-7.68t-30.208-20.48-20.48-30.208-7.68-36.864 7.68-36.864 20.48-30.208 30.208-19.968 37.888-7.168zm425.984 2.048q19.456 0 37.376 7.168t30.72 19.968 20.48 30.208 7.68 36.864-7.68 36.864-20.48 30.208-30.72 20.48-37.376 7.68-36.864-7.68-30.208-20.48-20.48-30.208-7.68-36.864 7.68-36.864 20.48-30.208 30.208-19.968 36.864-7.168zm172.032-581.632q28.672 0 44.544 7.68t22.528 18.944 6.144 24.064-3.584 22.016-13.312 37.888-22.016 62.976-23.552 68.096-18.944 53.248q-13.312 40.96-33.28 56.832T839.68 578.56h-537.6l14.336 92.16h517.12q49.152 0 49.152 41.984 0 20.48-9.728 35.84t-38.4 14.336H297.984q-20.48 0-34.304-9.216T240.64 729.6t-14.848-32.256-8.704-32.768q-1.024-6.144-5.632-29.696T200.192 576t-14.848-78.848T168.96 409.6q-19.456-103.424-44.032-230.4h-76.8q-15.36 0-25.6-7.68T5.632 153.088t-9.216-23.04-2.56-22.528q0-20.48 13.824-33.792T45.056 61.44H148.48q20.48 0 32.768 6.144t19.456 15.36 10.24 18.944 5.12 16.896q2.048 8.192 4.096 23.04t4.096 30.208q3.072 18.432 6.144 38.912h700.416zm-37.888 91.136l-641.024-2.048 35.84 185.344 535.552 1.024z"/>
+      </svg>
       </span>
       <span class="cart-count" v-if="cartItemCount > 0">{{ cartItemCount }}</span>
     </div>
@@ -158,12 +158,12 @@ export default {
       cartItems: [], // 购物车商品
       // 样例商品数据（可自行扩展）
       products: [
-        { id: 101, name: '咖啡', description: '双份特浓意式融合丝滑牛奶，入口香醇，回甘悠长。', price: '22.00', image: require('@/assets/img/tea.png'), video: require('@/assets/video/6.mp4') },
-        { id: 102, name: '可乐', description: '清爽气泡轻吻味蕾，柠檬与蜂蜜的酸甜恰到好处。', price: '16.00', image: require('@/assets/img/water.png'), video: require('@/assets/video/4.mp4') },
-        { id: 103, name: '果汁', description: '日式抹茶遇上轻盈奶油，茶香清冽，绵软治愈。', price: '32.00', image: require('@/assets/img/snack.png'), video: require('@/assets/video/5.mp4') },
-        { id: 104, name: '饼干', description: '高可可含量巧克力碎，外脆内软，越嚼越香。', price: '12.00', image: require('@/assets/img/snack.png'), video: require('@/assets/video/2.mp4') },
-        { id: 105, name: '面包', description: '粉柚果香与多多酸甜交织，维C爆表元气满满。', price: '18.00', image: require('@/assets/img/drinks.png'), video: require('@/assets/video/3.mp4') },
-        { id: 106, name: '坚果', description: '粉柚果香与多多酸甜交织，维C爆表元气满满。', price: '18.00', image: require('@/assets/img/drinks.png'), video: require('@/assets/video/1.mp4') }
+        { id: 101,svgname:'kafei', name: '咖啡', description: '双份特浓意式融合丝滑牛奶，入口香醇，回甘悠长。', price: '22.00', image: require('@/assets/img/tea.png'), video: require('@/assets/video/6.mp4') },
+        { id: 102,svgname:'cola', name: '可乐', description: '清爽气泡轻吻味蕾，柠檬与蜂蜜的酸甜恰到好处。', price: '16.00', image: require('@/assets/img/water.png'), video: require('@/assets/video/4.mp4') },
+        { id: 103,svgname:'drink', name: '果汁', description: '日式抹茶遇上轻盈奶油，茶香清冽，绵软治愈。', price: '32.00', image: require('@/assets/img/snack.png'), video: require('@/assets/video/5.mp4') },
+        { id: 104,svgname:'binggan', name: '饼干', description: '高可可含量巧克力碎，外脆内软，越嚼越香。', price: '12.00', image: require('@/assets/img/snack.png'), video: require('@/assets/video/2.mp4') },
+        { id: 105,svgname:'mianbao', name: '面包', description: '粉柚果香与多多酸甜交织，维C爆表元气满满。', price: '18.00', image: require('@/assets/img/drinks.png'), video: require('@/assets/video/3.mp4') },
+        { id: 106,svgname:'jianguo', name: '坚果', description: '粉柚果香与多多酸甜交织，维C爆表元气满满。', price: '18.00', image: require('@/assets/img/drinks.png'), video: require('@/assets/video/1.mp4') }
       ],
       timeoutId : null,
       activeProductIndex: 0,
@@ -777,7 +777,7 @@ export default {
 .empty-tip { color: #9aa0a6; font-size: 14px; padding: 8px 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); border-radius: 999px; }
 .orderbut {
   position: absolute;
-  bottom: 200px;
+  bottom: 250px;
   left: 20%;
   display: flex;
   align-items: center;
@@ -1128,47 +1128,46 @@ export default {
   z-index: 1600;
   display: flex;
   align-items: center;
-  padding: 22px 32px;
-  background: rgba(0,0,0,0.55);
-  backdrop-filter: blur(8px);
-  border-top: 1px solid rgba(255,255,255,0.1);
-  gap: 24px;
-  min-height: 88px;
+  padding: 30px;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(12px);
+  border-top: 1.5px solid rgba(255,255,255,0.1);
+  min-height: 120px;
 }
 
 /* 左右导航按钮 */
 .bottom-nav-btn {
   flex: 0 0 auto;
-  width: 120px;
-  height: 80px;
+  width: 150px;
+  height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.12);
   color: #fff;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
-  margin-left: 8px;
+  margin-left: 10px;
+  border: 1.5px solid rgba(255,255,255,0.2);
 }
 .bottom-nav-btn-back {
-  font-size: 28px;
+  font-size: 36px;
   flex: 0 0 auto;
-  width: 120px;
-  height: 80px;
+  width: 150px;
+  height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: row;
+  flex-direction: column;
   gap: 6px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.12);
   color: #fff;
   cursor: pointer;
+  border: 1.5px solid rgba(255,255,255,0.2);
   transition: all 0.3s ease;
   position: relative;
-  margin-right: 8px;
+  margin-right: 15px;
 }
 
 .bottom-nav-btn:hover {
@@ -1181,7 +1180,9 @@ export default {
   align-items: center;
   justify-content: center;
 }
-
+.svgclass{
+  color: #000 !important;
+}
 /* 购物车数量徽章 */
 .cart-count {
   position: absolute;
@@ -1206,42 +1207,53 @@ export default {
   flex: 1;
   display: flex; 
   overflow-x: auto; 
-  gap: 18px; 
-  padding: 0 16px;
+  gap: 12px; 
+  padding: 0 12px;
   scrollbar-width: none;
   justify-content: flex-start;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
 }
 .bottom-bar__list::-webkit-scrollbar { display: none; }
-.bottom-bar__list > .bottom-chip:first-child { margin-left: 12px; }
-.bottom-bar__list > .bottom-chip:last-child { margin-right: 12px; }
+.bottom-bar__list > .bottom-chip:first-child { margin-left: 4px; }
+.bottom-bar__list > .bottom-chip:last-child { margin-right: 4px; }
 .bottom-chip { 
   flex: 0 0 auto; 
-  display: inline-flex; 
+  display: flex; 
+  flex-direction: column;
   align-items: center; 
-  gap: 14px; 
-  padding: 0 8px; 
-  width: 120px;
-  height: 80px;
+  gap: 12px; 
+  padding: 12px; 
+  width: 130px;
+  height: 130px;
   justify-content: center;
-  border: 1px solid rgba(255,255,255,0.12); 
-  background: rgba(255,255,255,0.06); 
+  border: 1.5px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.12);
   color: #fff; 
   cursor: pointer; 
-  transition: transform .2s ease, background .2s ease, border-color .2s ease; 
-  min-height: 56px;
+  transition: all 0.3s ease;
   scroll-snap-align: center;
 }
-.bottom-chip:hover { transform: translateY(-2px); background: rgba(255,255,255,0.1); }
+.bottom-chip:hover { 
+  transform: translateY(-2px); 
+  background: rgba(255,255,255,0.2);
+  border-color: rgba(255,255,255,0.3);
+}
 .bottom-chip.active { 
   background: #ffffff; 
   color: #000; 
   border-color: #ffffff; 
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
-.bottom-chip__name { font-size: 32px; font-weight: 500; white-space: nowrap; text-align: center; width: 100%; }
+.bottom-chip__name { 
+  font-size: 30px; 
+  font-weight: 500; 
+  white-space: nowrap; 
+  text-align: center; 
+  width: 100%;
+}
 
 /* 滚动条样式 */
 .category-sidebar::-webkit-scrollbar,

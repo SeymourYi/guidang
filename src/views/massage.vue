@@ -11,9 +11,8 @@
         loop
       ></video>
     </div>
-    
     <div class="logo">
-      <img :src="logo" alt="logo" class="logo-img" width="300" height="200">
+      <img :src="logo" alt="logo" class="logo-img" width="300" height="40">
     </div>
     <!-- 底部操作栏 -->
     <div class="bottom-bar">
@@ -33,7 +32,12 @@
           class="bottom-chip"
           @click="selectProject(idx)"
         >
+        <div>
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <img :src="require(`@/assets/svg/clock.svg`)"  class="svgclass" width="60" height="60">
+         </div>
           <span class="bottom-chip__name">{{ project.name }}</span>
+        </div>
         </div>
       </div>
     </div>
@@ -51,11 +55,13 @@ export default {
        projects: [
         { 
           id: 1, 
-          name: '9:00~12:00'
+          name: '9:00~12:00',
+          svg: '1'
         },
         { 
           id: 2, 
-          name: '14:00~17:00'
+          name: '14:00~17:00',
+          svg: '2'
         },
       ]
     }
@@ -154,22 +160,22 @@ export default {
 }
 
 .bottom-nav-btn-back {
-  font-size: 28px;
+  font-size: 36px;
   flex: 0 0 auto;
-  width: 120px;
-  height: 80px;
+  width: 150px;
+  height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: row;
+  flex-direction: column;
   gap: 6px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.12);
   color: #fff;
   cursor: pointer;
+  border: 1.5px solid rgba(255,255,255,0.2);
   transition: all 0.3s ease;
   position: relative;
-  font-family: 'SourceHanSansCN-Regular';
+  margin-right: 15px;
 }
 
 .bottom-nav-btn-back:hover {
@@ -203,7 +209,7 @@ export default {
   min-width: 80px;
   margin: 0 10px;
   /* max-width: 150px; */
-  height: 70px;
+  height: 140px;
   justify-content: center;
   border: 1px solid rgba(255,255,255,0.12); 
   background: rgba(255,255,255,0.06); 

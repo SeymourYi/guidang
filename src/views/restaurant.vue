@@ -13,13 +13,13 @@
     </div>
     
     <div class="logo">
-      <img :src="logo" alt="logo" class="logo-img" width="300" height="200">
+      <img :src="logo" alt="logo" class="logo-img" width="300" height="40">
     </div>
     
     <!-- 底部操作栏 -->
     <div class="bottom-bar">
       <!-- 返回按钮 -->
-      <div class="bottom-nav-btn-back" @click="goBack">
+    <div class="bottom-nav-btn-back" @click="goBack">
         <span class="nav-icon">
           <svg viewBox="0 0 24 24" width="30" height="30">
             <path d="M15.5 19.5L8 12l7.5-7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -27,6 +27,7 @@
         </span>
         返回
       </div>
+    
       
       <!-- 项目选择列表 -->
       <div class="bottom-bar__list">
@@ -34,9 +35,13 @@
           v-for="(project, idx) in projects"
           :key="project.id"
           class="bottom-chip"
+          :class="{ active: idx === activeProjectIndex }"
           @click="selectProject(idx)"
         >
-          <span class="bottom-chip__name">{{ project.name }}</span>
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <img :src="require(`@/assets/svg/${project.icon}${idx === activeProjectIndex ? '_black' : ''}.svg`)" class="svgclass" width="60" height="60">
+            <span class="bottom-chip__name">{{ project.name }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -50,14 +55,17 @@ export default {
     return {
       logo: require('@/assets/svg/aito.svg'),
       restaurantVideo: require('@/assets/video/canting.mp4'),
+      activeProjectIndex: -1,
       projects: [
         { 
           id: 1, 
-          name: '预约中餐'
+          name: '预约中餐',
+          icon: 'lunch'
         },
         { 
           id: 2, 
-          name: '预约晚餐'
+          name: '预约晚餐',
+          icon: 'dinner'
         }
       ]
     }
@@ -67,7 +75,7 @@ export default {
       this.$router.push('/')
     },
     selectProject(index) {
-      // 项目选择功能保留但不切换视频
+      this.activeProjectIndex = index;
       console.log('选择了项目:', this.projects[index].name);
     }
   }
@@ -146,26 +154,26 @@ export default {
   backdrop-filter: blur(8px);
   border-top: 1px solid rgba(255,255,255,0.1);
   gap: 24px;
-  min-height: 88px;
+  min-height: 120px;
 }
 
 .bottom-nav-btn-back {
-  font-size: 28px;
+  font-size: 36px;
   flex: 0 0 auto;
-  width: 120px;
-  height: 80px;
+  width: 150px;
+  height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: row;
+  flex-direction: column;
   gap: 6px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.12);
   color: #fff;
   cursor: pointer;
+  border: 1.5px solid rgba(255,255,255,0.2);
   transition: all 0.3s ease;
   position: relative;
-  font-family: 'SourceHanSansCN-Regular';
+  margin-right: 15px;
 }
 
 .bottom-nav-btn-back:hover {
@@ -210,18 +218,18 @@ export default {
   display: inline-flex; 
   align-items: center; 
   gap: 14px; 
-  padding: 0 20px; 
-  min-width: 120px;
-  margin: 0 10px;
+  padding: 10px 30px; 
+  min-width: 180px;
+  margin: 0 15px;
   width: auto;
-  height: 80px;
+  height: 120px;
   justify-content: center;
   border: 1px solid rgba(255,255,255,0.12); 
   background: rgba(255,255,255,0.06); 
   color: #fff; 
   cursor: pointer; 
   transition: transform .2s ease, background .2s ease, border-color .2s ease; 
-  min-height: 56px;
+  min-height: 100px;
   scroll-snap-align: center;
 }
 
@@ -239,10 +247,15 @@ export default {
 }
 
 .bottom-chip__name { 
-  font-size: 32px; 
+  font-size: 30px; 
   font-weight: 500; 
   white-space: nowrap; 
   text-align: center; 
-  width: 100%; 
+  width: 100%;
+  margin-top: 10px;
+}
+
+.svgclass {
+  transition: all 0.3s ease;
 }
 </style>

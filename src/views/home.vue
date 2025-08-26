@@ -3,7 +3,7 @@
 
     
     <div class="logo">
-      <img :src="logo" alt="logo" class="logo-img" width="300" height="200">
+      <img :src="logo" alt="logo" class="logo-img" width="300" height="40">
     </div>
     <div class="swiper-container">
       <div class="swiper-wrapper">
@@ -27,22 +27,43 @@
         </div>
       </div>
     </div>
-     
-     <!-- 底部区域选择栏 -->
-     <div class="bottom-tab-bar">
+     <div class="button_row">
+  <div class="bottom-tab-bar">
        <div class="tab-container">
         <div class="tab-container-inner">
           <div 
-           v-for="(area, index) in areas" 
+           v-for="(area, index) in areas.slice(0, 3)" 
            :key="area.id"
            class="tab-item"
            @click="goToArea(index)"
          >
+         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <img :src="require(`@/assets/svg/${area.id}.svg`)" :alt="area.name" class="svgclass" width="60" height="60">
+         </div>
            {{ area.name }}
          </div>
         </div>
        </div>
      </div>
+      <div class="bottom-tab-bar">
+       <div class="tab-container">
+        <div class="tab-container-inner">
+          <div 
+           v-for="(area, index) in areas.slice(3,6)" 
+           :key="area.id"
+           class="tab-item"
+           @click="goToArea(index+3)"
+         >
+         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <img :src="require(`@/assets/svg/${area.id}.svg`)" :alt="area.name" class="svgclass" width="60" height="60">
+         </div>
+           {{ area.name }}
+         </div>
+        </div>
+       </div>
+     </div>
+     </div>
+   
    
   </div>
 </template>
@@ -311,8 +332,12 @@ export default {
   /* 脱离文档流，不占据位置 */
   position: absolute;
   /* 可选：设置位置，默认会在原来的位置 */
-  top: 75vh;
+  top: 82vh;
   /* left: 0; */
+}
+.svgclass{
+  color: white;
+  
 }
 .orderbut1 {
   width: 300px;
@@ -360,7 +385,10 @@ export default {
   background: rgba(0, 0, 0, 0.5);
 }
 
-
+.button_row{
+  display: flex;
+  flex-direction: column;
+}
 
 .background-video {
   width: 100%;
@@ -412,10 +440,7 @@ export default {
 
 /* 底部选择栏样式 */
 .bottom-tab-bar {
-  position: absolute;
-  bottom: 20px;
-  left: 0;
-  right: 0;
+ margin-bottom: 120px;
   background: transparent;
   padding: 0 10px;
   z-index: 150;
@@ -478,6 +503,8 @@ export default {
   }
   
   .tab-item {
+    display: flex ;
+    flex-direction: column;
     font-size: 24px;
     padding: 10px 16px;
     min-width: 70px;
@@ -495,6 +522,8 @@ export default {
   }
   
   .tab-item {
+      display: flex ;
+    flex-direction: column;
     font-size: 20px;
     padding: 8px 12px;
     min-width: 60px;
@@ -506,8 +535,10 @@ export default {
 }
 
 .tab-item {
+    display: flex ;
+    flex-direction: column;
   flex: 1;
-  height: 80px;  
+  /* height: 80px;   */
   align-items: center;
   justify-content: center;
   display: flex;
@@ -516,19 +547,22 @@ export default {
   border: 1px solid #fff;
   transition: all 0.3s ease;
   font-family: 'SourceHanSansCN-Regular';
-  font-size: 30px;
+  font-size: 40px;
   font-weight: 400;
   white-space: nowrap;
   outline: none;
   backdrop-filter: blur(5px);
-    padding: 8px 10px;
+    padding: 25px 30px;
   box-sizing: border-box;
    margin: 0 10px;
 }
 .tab-container-inner{
   display: flex;
+  justify-content: center;
+  width: 90vw;
+  align-items: center;
   flex-direction: row;
-  /* gap: 30px; */
+  /* gap: 0 20px; */
 }
 .tab-item:hover {
   transform: translateY(-2px);
