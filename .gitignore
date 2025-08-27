@@ -22,7 +22,7 @@ jspm_packages/
 
 # Vite / Vue / React build output
 dist/
-build/
+# build/
 .cache/
 temp/
 tmp/
