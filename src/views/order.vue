@@ -1207,7 +1207,7 @@ export default {
   flex: 1;
   display: flex; 
   overflow-x: auto; 
-  gap: 12px; 
+  /* gap: 12px;  */
   padding: 0 12px;
   scrollbar-width: none;
   justify-content: flex-start;
@@ -1224,6 +1224,7 @@ export default {
   flex-direction: column;
   align-items: center; 
   gap: 12px; 
+  margin-right: 30px;
   padding: 12px; 
   width: 130px;
   height: 130px;
