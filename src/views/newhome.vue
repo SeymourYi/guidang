@@ -40,7 +40,7 @@
           <!-- 文本容器 -->
           <div class="text_container" :class="{ 'selected': index === selectedArea }">
             <div class="name">{{ item.name }}</div>
-            <div class="disc">{{ item.disc }}</div>
+            <!-- <div class="disc">{{ item.disc }}</div> -->
           </div>
 
           <!-- 边框装饰 -->
@@ -184,67 +184,6 @@ mounted() {
   animation: float 6s ease-in-out infinite;
 }
 
-.circle-1 {
-  width: 100px;
-  height: 100px;
-  top: 10%;
-  left: 10%;
-  animation-delay: 0s;
-}
-
-.circle-2 {
-  width: 150px;
-  height: 150px;
-  top: 60%;
-  right: 10%;
-  animation-delay: 2s;
-}
-
-.circle-3 {
-  width: 80px;
-  height: 80px;
-  bottom: 20%;
-  left: 20%;
-  animation-delay: 4s;
-}
-
-.pulse-dot {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background: radial-gradient(circle, rgba(74, 144, 226, 0.6), transparent);
-  border-radius: 50%;
-  animation: pulse 3s infinite;
-}
-
-.dot-1 {
-  top: 30%;
-  right: 25%;
-  animation-delay: 1s;
-}
-
-.dot-2 {
-  bottom: 40%;
-  left: 30%;
-  animation-delay: 2s;
-}
-
-.dot-3 {
-  top: 70%;
-  left: 70%;
-  animation-delay: 3s;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(180deg); }
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 0.3; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(1.5); }
-}
-
 /* 保持原有的三行两列布局 */
 .grid-container {
   display: grid;
@@ -318,55 +257,6 @@ mounted() {
   border-radius: 20px;
   overflow: hidden;
 }
-
-/* 视频渐变遮罩 */
-.video-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    135deg,
-    rgba(74, 144, 226, 0.1) 0%,
-    transparent 40%,
-    transparent 60%,
-    rgba(0, 0, 0, 0.1) 100%
-  );
-  z-index: 1;
-}
-
-/* 选中状态指示器 */
-.selection-indicator {
-  position: absolute;
-  top: -3px;
-  left: -3px;
-  right: -3px;
-  bottom: -3px;
-  border-radius: 23px;
-  background: linear-gradient(45deg, transparent, transparent);
-  opacity: 0;
-  transition: all 0.4s ease;
-  z-index: 0;
-}
-
-.selection-indicator.active {
-  opacity: 1;
-  background: linear-gradient(45deg, 
-    rgba(74, 144, 226, 0.4), 
-    rgba(155, 207, 255, 0.6), 
-    rgba(74, 144, 226, 0.4)
-  );
-  box-shadow: 0 0 20px rgba(74, 144, 226, 0.3);
-  animation: glow 2s ease-in-out infinite alternate;
-}
-
-@keyframes glow {
-  from { box-shadow: 0 0 20px rgba(74, 144, 226, 0.3); }
-  to { box-shadow: 0 0 30px rgba(74, 144, 226, 0.5); }
-}
-
-/* 增强文本容器 */
 .text_container {
   position: absolute;
   top: 10px;
@@ -379,34 +269,9 @@ mounted() {
   flex-direction: column;
   border-radius: 15px;
   z-index: 2;
-  
-  /* 玻璃拟态文本背景 */
-  background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.25) 0%, 
-    rgba(255, 255, 255, 0.1) 100%
-  );
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  
-  transition: all 0.3s ease;
   opacity: 0.85;
 }
 
-.text_container.selected {
-  background: linear-gradient(135deg, 
-    rgba(74, 144, 226, 0.3) 0%, 
-    rgba(155, 207, 255, 0.2) 100%
-  );
-  transform: scale(1.05);
-  opacity: 1;
-  box-shadow: 0 6px 20px rgba(74, 144, 226, 0.2);
-}
-
-.text_container:hover {
-  transform: scale(1.02);
-  opacity: 1;
-}
 
 .name {
   display: block;
@@ -419,36 +284,5 @@ mounted() {
 .disc {
   font-size: 25px;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-/* 边框装饰 */
-.border-decoration {
-  position: absolute;
-  top: -1px;
-  left: -1px;
-  right: -1px;
-  bottom: -1px;
-  border-radius: 21px;
-  background: linear-gradient(45deg, 
-    rgba(255, 255, 255, 0.1), 
-    transparent, 
-    rgba(74, 144, 226, 0.1)
-  );
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: -1;
-}
-
-.item-container:hover .border-decoration {
-  opacity: 1;
-}
-
-/* 非选中项的透明度效果 */
-.grid-container .item-container:not(.grid-item-large) {
-  opacity: 0.8;
-}
-
-.grid-container:hover .item-container:not(:hover):not(.grid-item-large) {
-  opacity: 0.6;
 }
 </style>
