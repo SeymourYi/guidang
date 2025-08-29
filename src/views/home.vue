@@ -2,62 +2,105 @@
   <div class="imgSwiper">
 
     
-    <div class="logo">
+    <!-- <div class="logo">
       <img :src="logo" alt="logo" class="logo-img" width="300" height="40">
-    </div>
+    </div> -->
     <div class="swiper-container">
       <div class="swiper-wrapper">
-        <div class="swiper-slide" v-for="(item, index) in mediaArr" :key="index">
-          <!-- 视频元素 -->
-          <video 
-            v-if="item.type === 'video'"
-            :src="item.src"
+        <div class="swiper-slide">
+          <video src="https://hima.auto/dam/hima-site/cn/wenjie/m7-ultra/new/images/appearance/m7-ultra-id-video-xs.mp4" 
+             alt="Slide 1" 
             autoplay
-            preload="auto"
             playsinline
             muted
             webkit-playsinline
-          ></video>
-          <!-- 图片元素 -->
-          <img 
-            v-else-if="item.type === 'image'"
-            :src="item.src"
-            :alt="item.alt || ''"
-          />
+            loop
+            style="width:100%; height:100%; object-fit: cover; object-position: 75% center;"
+/>
         </div>
       </div>
     </div>
      <div class="button_row">
-  <div class="bottom-tab-bar">
+      <div class="bottom-tab-bar">
        <div class="tab-container">
-        <div class="tab-container-inner">
+         <div class="tab-container-inner">
           <div 
-           v-for="(area, index) in areas.slice(0, 3)" 
+           v-for="(area, index) in areas.slice(0,2)" 
            :key="area.id"
            class="tab-item"
            @click="goToArea(index)"
          >
-         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            <img :src="require(`@/assets/svg/${area.id}.svg`)" :alt="area.name" class="svgclass" width="60" height="60">
-         </div>
+         <video 
+         :src="area.video" 
+             alt="Slide 1" 
+            autoplay
+            playsinline
+            muted
+            webkit-playsinline
+            loop
+            class="tab-item-video"
+            style="width:100%; height:100%; object-fit: cover; object-position: 75% center;"
+/>
+ <div class="tab-item-content">
            {{ area.name }}
+            <div class="disc">{{ area.disc }} ></div>
+            </div>
          </div>
         </div>
        </div>
      </div>
       <div class="bottom-tab-bar">
        <div class="tab-container">
+       <div class="tab-container-inner">
+          <div 
+           v-for="(area, index) in areas.slice(2,4)" 
+           :key="area.id"
+           class="tab-item_active"
+           @click="goToArea(index+2)"
+         >
+         <video 
+         :src="area.video" 
+             alt="Slide 1" 
+            autoplay
+            playsinline
+            muted
+            webkit-playsinline
+            loop
+            class="tab-item-video"
+            style="width:100%; height:100%; object-fit: cover; object-position: 75% center;"
+/>
+ <div class="tab-item-content">
+           {{ area.name }}
+            <div class="disc">{{ area.disc }} ></div>
+            </div>
+         </div>
+        </div>
+       </div>
+     </div>
+        <div class="bottom-tab-bar">
+       <div class="tab-container">
         <div class="tab-container-inner">
           <div 
-           v-for="(area, index) in areas.slice(3,6)" 
+           v-for="(area, index) in areas.slice(4,6)" 
            :key="area.id"
            class="tab-item"
-           @click="goToArea(index+3)"
+           @click="goToArea(index+4)"
          >
-         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            <img :src="require(`@/assets/svg/${area.id}.svg`)" :alt="area.name" class="svgclass" width="60" height="60">
-         </div>
+         <video 
+         :src="area.video" 
+             alt="Slide 1" 
+            autoplay
+            playsinline
+            muted
+            webkit-playsinline
+            loop
+            class="tab-item-video"
+            style="width:100%; height:100%; object-fit: cover; object-position: 75% center;"
+/>
+ <div class="tab-item-content">
            {{ area.name }}
+            <div class="disc">{{ area.disc }} ></div>
+            </div>
          </div>
         </div>
        </div>
@@ -82,32 +125,55 @@ export default {
         { 
           id: 'bar', 
           name: '吧台', 
-          route: '/order'
+          route: '/order',
+          disc: '饮品小吃服务',
+          video:require('@/assets/video/anniu_batai.mp4'),
+          // video: "https://video-qn.ibaotu.com/22/08/26/ing/video/ING_VID_5352903.mp4"
         },
         { 
           id: 'massage', 
           name: '按摩室', 
-          route: '/massage'
+          route: '/massage',
+          disc: '预约按摩服务',
+          video:require('@/assets/video/anniu_anmo.mp4'),
+          
+          // video: "https://video-qn.ibaotu.com/22/08/26/ing/video/ING_VID_5352903.mp4"
         },
         { 
           id: 'restaurant', 
-          name: '餐厅', 
-          route: '/restaurant'
+          name: '餐厅',
+          route: '/restaurant',
+          disc: '预约餐饮服务',
+          video:require('@/assets/video/anniu_wucan.mp4'),
+
+          // video: "https://video-qn.ibaotu.com/preview/yayv/v1/23/11/22/63dfdf5046ba45fb88b80d419a865c44.mp4"
         },
         { 
           id: 'baby', 
           name: '母婴室', 
-          route: '/baby'
+          route: '/baby',
+          disc: '母婴设施使用',
+          video:require('@/assets/video/anniu_muying.mp4'),
+
+          // video: "https://video-qn.ibaotu.com/19/87/61/73h888piCvGB.mp4"
         },
         { 
           id: 'parking', 
           name: '停车场', 
-          route: '/parking'
+          route: '/parking',
+          disc: '预约停车时段',
+          video:require('@/assets/video/anniu_tingchechang.mp4'),
+
+          // video: "https://video-qn.ibaotu.com/01/81/43/09s888piCmDY.mp4"
         },
         { 
           id: 'children', 
           name: '儿童室', 
-          route: '/children'
+          route: '/children',
+          disc: '儿童游乐设施',
+          video:require('@/assets/video/anniu_ertong.mp4'),
+
+          // video: "https://video-qn.ibaotu.com/12/50/17/06apkijf6.mp4"
         }
       ],
       currentAreaIndex: 0,
@@ -318,7 +384,16 @@ export default {
   position: relative;
   overflow: hidden;
 }
-
+.tab-item-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;         /* 铺满容器 */
+  object-position: 75% center; /* 视频偏右显示 */
+  z-index: 1;                /* 放在文字下层 */
+}
 .button_row{
   display: flex;
   flex-direction: row;
@@ -332,12 +407,19 @@ export default {
   /* 脱离文档流，不占据位置 */
   position: absolute;
   /* 可选：设置位置，默认会在原来的位置 */
-  top: 82vh;
+  top: 55vh;
   /* left: 0; */
 }
 .svgclass{
   color: white;
   
+}
+.disc{
+  position: relative;
+  font-size: 20px;
+  color: #ffffff;
+  margin-top: 5px;
+  font-family: 'SourceHanSansCN-Regular';
 }
 .orderbut1 {
   width: 300px;
@@ -454,10 +536,20 @@ export default {
   align-items: center;
   height: 100px;
   width: 100%;
-  margin: 0 auto;
+  margin: 85px auto;
   pointer-events: auto;
   /* padding: 0 0px; */
   box-sizing: border-box;
+}
+.tab-item-content{
+  background: #00000026;
+  border-radius: 10px;
+  padding: 10px 20px;
+  bottom: 40%;
+  position: relative;
+  z-index: 2;                /* 文字内容在上层 */
+  color: #ffffff;
+  text-align: center;
 }
 
 .tab-container::-webkit-scrollbar {
@@ -544,15 +636,18 @@ export default {
   display: flex;
   color: #fff;
   cursor: pointer;
-  border: 1px solid #fff;
+  width: 200px;
+  height: 350px;
+  /* border: 1px solid #fff; */
   transition: all 0.3s ease;
+  border-radius: 10px;
   font-family: 'SourceHanSansCN-Regular';
   font-size: 40px;
   font-weight: 400;
   white-space: nowrap;
   outline: none;
   backdrop-filter: blur(5px);
-    padding: 25px 30px;
+    padding: 60px 30px;
   box-sizing: border-box;
    margin: 0 10px;
 }
@@ -569,11 +664,30 @@ export default {
   box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
 }
 
-.tab-item.active {
-  border: 1px solid #fff;
-  color: #ffffff;
-  font-weight: 600;
-  font-size: 26px;
+.tab-item_active {
+ display: flex ;
+    flex-direction: column;
+  flex: 1;
+  /* height: 80px;   */
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  color: #fff;
+  cursor: pointer;
+  width: 250px;
+  height: 400px;
+  /* border: 1px solid #fff; */
+  transition: all 0.3s ease;
+  border-radius: 10px;
+  font-family: 'SourceHanSansCN-Regular';
+  font-size: 40px;
+  font-weight: 400;
+  white-space: nowrap;
+  outline: none;
+  backdrop-filter: blur(5px);
+    padding: 70px 40px;
+  box-sizing: border-box;
+   margin: 0 10px;
   box-shadow: 0 4px 15px rgba(255, 255, 255, 0.4);
 }
 </style>

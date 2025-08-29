@@ -19,8 +19,8 @@ export default {
 @font-face {
     font-family: AudiTypeExtended;
 
-    src: url("./assets/fonts/DFPHeiW5-GB.TTF");
-    url: url("./assets/fonts/DFPHeiW5-GB.TTF");
+    src: url("./assets/fonts/DFPHeiW5-GB.ttf");
+    url: url("./assets/fonts/DFPHeiW5-GB.ttf");
 }
 
 @font-face {

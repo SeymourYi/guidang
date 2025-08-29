@@ -20,6 +20,7 @@ import restaurant from '@/views/restaurant'
 import baby from '@/views/baby'
 import parking from '@/views/parking'
 import children from '@/views/children'
+import newhome from '@/views/newhome.vue'
 import axios from 'axios'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
@@ -58,7 +59,7 @@ export default new Router({
     {
         path: '/',
         name: 'home',
-        component: home
+        component: newhome
     }, 
     {
         path: '/ok',
