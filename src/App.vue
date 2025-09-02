@@ -14,20 +14,23 @@ export default {
 * {
     margin: 0;
     padding: 0;
+    font-family:'SourceHanSansCN-Regular' ;
 }
-
-@font-face {
+/* @font-face {
     font-family: AudiTypeExtended;
 
     src: url("./assets/fonts/DFPHeiW5-GB.ttf");
     url: url("./assets/fonts/DFPHeiW5-GB.ttf");
-}
-
+} */
 @font-face {
+  font-family: 'SourceHanSansCN-Regular';
+  src: url('./assets/fonts/SourceHanSansCN-Regular.otf') format('opentype');
+}
+/* @font-face {
     font-family: AudiTypeExtended;
     src: url("./assets/fonts/AudiTypeV01-ExtendedNormal.otf");
     url: url("./assets/fonts/AudiTypeV01-ExtendedNormal.otf");
-}
+} */
 
 html,
 body {

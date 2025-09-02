@@ -21,6 +21,8 @@ import baby from '@/views/baby'
 import parking from '@/views/parking'
 import children from '@/views/children'
 import newhome from '@/views/newhome.vue'
+import swperscreen from '@/views/swperscreen.vue'
+
 import axios from 'axios'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';

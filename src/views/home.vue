@@ -15,8 +15,7 @@
             muted
             webkit-playsinline
             loop
-            style="width:100%; height:100%; object-fit: cover; object-position: 75% center;"
-/>
+            style="width:100%; height:100%; object-fit: cover; object-position: 75% center;"/>
         </div>
       </div>
     </div>

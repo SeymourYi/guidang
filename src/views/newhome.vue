@@ -1,13 +1,11 @@
 <template>
-    <!-- <div  v-if="isloading">
-          <video :src="loading"
-              ref="videos"
-                   autoplay muted loop
-                   style="width: 100%; height: 100%; object-fit: cover;">
-            </video>
-    </div> -->
-  <div class="container">
-    <!-- 装饰背景元素 -->
+    <div class="swiper-container">
+      <div class="father_swpercontain">
+<div class="swper_contain" :style="`transform:translateX(${-selectedArea*50}%)`">
+  <div  class="casdads" @click="handleAreaClick" >
+    <Swperitem1/>
+  </div>
+<div class="container">
     <div class="bg-decoration">
       <div class="floating-circle circle-1"></div>
       <div class="floating-circle circle-2"></div>
@@ -20,39 +18,35 @@
     <div class="grid-container">
       <div v-for="(item, index) in areas" :key="index">
         <div class="item-container"
-             :class="{ 'grid-item-large': index === selectedArea }"
              @click="switchArea(index);goToArea(index)">
           
-          <!-- 视频容器 -->
           <div class="video-wrapper">
             <video :src="item.video"
               ref="videos"
                    autoplay muted loop
                    style="width: 100%; height: 100%; object-fit: cover;">
             </video>
-            <!-- 渐变遮罩层 -->
-            <!-- <div class="video-overlay"></div> -->
           </div>
-
-          <!-- 选中状态指示器 -->
-          <!-- <div class="selection-indicator" :class="{ 'active': index === selectedArea }"></div> -->
-          
-          <!-- 文本容器 -->
           <div class="text_container" :class="{ 'selected': index === selectedArea }">
             <div class="name">{{ item.name }}</div>
-            <!-- <div class="disc">{{ item.disc }}</div> -->
+            <div class="disc">{{ item.english }}</div>
           </div>
-
-          <!-- 边框装饰 -->
           <div class="border-decoration"></div>
         </div>
       </div>
     </div>
   </div>
+</div>
+      </div>
+    </div>
 </template>
-
 <script>
+import Swperitem1 from '../views/swperitem1.vue';
 export default {
+  components: {
+    Swperitem1
+  },
+  
   data() {
     return {
        loading:require('@/assets/video/loading.mp4'),
@@ -62,6 +56,7 @@ export default {
           name: '吧台', 
           route: '/order',
           disc: '饮品小吃服务',
+          english: 'Bar Counter',
           video: require('@/assets/callf.mp4')
         },
         { 
@@ -69,6 +64,7 @@ export default {
           name: '按摩室', 
           route: '/massage',
           disc: '预约按摩服务',
+          english: 'Massage Room',
           video: require('@/assets/video/anmo.mp4')
         },
         { 
@@ -76,6 +72,7 @@ export default {
           name: '餐厅',
           route: '/restaurant',
           disc: '预约餐饮服务',
+          english: 'Restaurant',
           video: require('@/assets/video/canting.mp4')
         },
         { 
@@ -83,6 +80,7 @@ export default {
           name: '母婴室', 
           route: '/baby',
           disc: '母婴设施使用',
+          english: 'Mother and Baby Room',
           video: require('@/assets/video/muying.mp4')
         },
         { 
@@ -90,6 +88,7 @@ export default {
           name: '停车场', 
           route: '/parking',
           disc: '预约停车时段',
+          english: 'Parking Area',
           video: require('@/assets/video/fixcar.mp4')
         },
         { 
@@ -97,16 +96,23 @@ export default {
           name: '儿童室', 
           route: '/children',
           disc: '儿童游乐设施',
+          english: 'Children\'s Area',
           video: require('@/assets/video/ertong.mp4')
         }
       ],
       selectedArea: 0,
-      isloading:true
+      isloading:true,
+      inactivityTimer: null,
     }
   },
   methods: {
     switchArea(index) {
       this.selectedArea = index;
+    },
+    bindActivityEvents() {
+      ['click', 'mousemove', 'touchstart', 'keydown', 'scroll'].forEach(event => {
+        window.addEventListener(event, this.resetInactivityTimer);
+      });
     },
       goToArea(index) {
       // 直接跳转到对应区域页面
@@ -123,25 +129,50 @@ export default {
           video.pause();
         }
       });
-    }
+    },
+    handleAreaClick(){
+      this.selectedArea=1
+      console.log('点击了区域:', this.selectedArea);
+    },
+    resetInactivityTimer() {
+      clearTimeout(this.inactivityTimer);
+      this.inactivityTimer = setTimeout(() => {
+        this.selectedArea = 0;
+      }, 50000); // 30秒无操作返回第一个
+    },
+    unbindActivityEvents() {
+      ['click', 'mousemove', 'touchstart', 'keydown', 'scroll'].forEach(event => {
+        window.removeEventListener(event, this.resetInactivityTimer);
+      });
+    },
+
   },
 mounted() {
-//       setTimeout(() => {
-//      this.isloading = false
-//   }, 5000);
-       this.controlVideos(); // 初始播放第一个
+  this.bindActivityEvents()
+  this.resetInactivityTimer(); // 初始化定时器
+  // this.controlVideos(); // 初始播放第一个
+  // console.log('组件已挂载，初始selectedArea:', this.selectedArea);
+  
   setInterval(() => {
-    console.log('定时器执行了');
-
+    // console.log('定时器执行了，当前selectedArea:', this.selectedArea);
+    
     // 判断是否到最后一个元素
-    if(this.selectedArea === this.areas.length - 1){
-      this.selectedArea = 0;
-    } else {
-      this.selectedArea++;
-    }
-     this.controlVideos(); // 切换后控制视频播放/暂停
+    // if(this.selectedArea === this.areas.length - 1){
+  //   if(this.selectedArea === 1){
+  //     this.selectedArea = 0;
+  //     console.log('重置到第一个区域:', this.selectedArea);
+  //   } else {
+  //     this.selectedArea++;
+  //     console.log('切换到下一个区域:', this.selectedArea);
+  //   // }
+  // }
+    // this.controlVideos(); // 切换后控制视频播放/暂停
   }, 5000);
-}
+},
+beforeUnmount() {
+    this.unbindActivityEvents();
+    clearTimeout(this.inactivityTimer);
+  }
 }
 </script>
 
@@ -155,7 +186,7 @@ mounted() {
     rgba(155, 207, 255, 0.1) 100%
   ); */
   /* background: transparent; */
-  background: rgb(0, 0, 0,0);
+background: #111;
   background-size: cover;
   /* background-image: url('../assets/img/image-removebg-preview.png'); */
   display: flex;
@@ -164,7 +195,6 @@ mounted() {
   position: relative;
   overflow: hidden;
 }
-
 /* 装饰背景元素 */
 .bg-decoration {
   position: absolute;
@@ -189,16 +219,16 @@ mounted() {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(3, 150px);
-  gap: 230px 40px;
+  gap: 240px 30px;
   padding: 10px;
-  margin-bottom: 50px;
+  margin-bottom: 200px;
   position: relative;
   z-index: 1;
 }
 
 .item-container {
   position: relative;
-  width: 300px;
+  width: 280px;
   height: 350px;
   display: flex;
   justify-content: center;
@@ -208,44 +238,12 @@ mounted() {
   font-weight: bold;
   overflow: hidden;
   cursor: pointer;
-  border-radius: 20px;
-  
-  /* 玻璃拟态效果 */
-  background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.25) 0%, 
-    rgba(255, 255, 255, 0.1) 100%
-  );
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  
-  /* 高级阴影效果 */
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.1),
-    0 2px 8px rgba(0, 0, 0, 0.05),
-    inset 0 1px 1px rgba(255, 255, 255, 0.5);
-  
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow:
+    0 10px 34px 10px rgba(255, 255, 255, 0.22),
+    0 6px 16px -8px rgba(255, 255, 255, 0.18),
+    0 2px 6px rgba(255, 255, 255, 0.12);
 }
-
-.item-container:hover {
-  transform: translateY(-5px);
-  box-shadow: 
-    0 12px 40px rgba(0, 0, 0, 0.15),
-    0 4px 12px rgba(0, 0, 0, 0.08),
-    inset 0 1px 1px rgba(255, 255, 255, 0.6);
-  border-color: rgba(74, 144, 226, 0.4);
-}
-
-/* 保持原有的选中放大效果 */
-.grid-item-large {
-  transform: scale(1.1) translateY(-5px);
-  z-index: 2;
-  box-shadow: 
-    0 16px 48px rgba(74, 144, 226, 0.2),
-    0 8px 24px rgba(0, 0, 0, 0.1),
-    inset 0 1px 1px rgba(255, 255, 255, 0.7);
-  border-color: rgba(74, 144, 226, 0.6);
-}
+/* removed odd bottom bar shadow */
 
 /* 视频容器 */
 .video-wrapper {
@@ -254,7 +252,7 @@ mounted() {
   left: 0;
   width: 100%;
   height: 100%;
-  border-radius: 20px;
+  /* border-radius: 20px; */
   overflow: hidden;
 }
 .text_container {
@@ -277,12 +275,37 @@ mounted() {
   display: block;
   padding-bottom: 10px;
   font-size: 35px;
-  font-weight: bold;
+  color:#fff;
+  font-weight:400;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .disc {
-  font-size: 25px;
+  font-size: 15px;
+  font-weight: 200;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+.father_swpercontain{
+    position: relative;
+    overflow: hidden;
+    width: 100vw;   
+    height: 100vh;
+}
+.swper_contain{
+  height: 100%;
+  display: flex;
+  width: 200%; /* 两个轮播项，每个100%，总共200% */
+  transition: transform 0.5s ease;
+}
+.swper_item{
+/* display: flex; */
+    background-color: red;
+    width: 50vw; /* 改为50vw，配合50%的translateX */
+    flex-shrink: 0;
+    height: 100vh;
+}
+.casdads{
+  width: 100%;
+  height: 100%;
 }
 </style>

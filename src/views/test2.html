@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>3D 图片画廊 — 6 张随机图片</title>
+  <style>
+    :root{
+      --card-w: 360px;
+      --card-h: 240px;
+      --radius: 520px; /* 环形半径，调节视觉深度 */
+      --count: 6;
+      --duration: 18s; /* 自动旋转周期 */
+      --bg: linear-gradient(135deg,#0f172a 0%, #07184a 100%);
+    }
+    html,body{
+      height:100%;
+      margin:0;
+      font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: var(--bg);
+      color:#fff;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    .wrap{
+      min-height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:40px;
+      flex-direction:column;
+      padding:40px 20px;
+      box-sizing:border-box;
+    }
+
+    h1{
+      margin:0 0 6px 0;
+      font-size:20px;
+      font-weight:600;
+      letter-spacing:0.4px;
+      opacity:0.95;
+    }
+    p.sub{
+      margin:0 0 18px 0;
+      color: #cbd5e1;
+      font-size:13px;
+    }
+
+    /* 视口容器提供透视 */
+    .stage{
+      width:calc(var(--card-w) + 180px);
+      height:calc(var(--card-h) + 200px);
+      perspective:1200px;
+      position:relative;
+      user-select:none;
+    }
+
+    /* 环形画廊：保持 3d 子元素不被扁平化 */
+    .carousel{
+      width:100%;
+      height:100%;
+      position:relative;
+      transform-style:preserve-3d;
+      transition: transform 600ms cubic-bezier(.2,.9,.2,1);
+      animation: spin var(--duration) linear infinite;
+      animation-play-state: running;
+    }
+
+    /* 当鼠标悬停时暂停旋转（由 JS 控制也会暂停）*/
+    .stage:hover .carousel{
+      animation-play-state: paused;
+    }
+
+    /* 每张卡片（图片）在环上定位 */
+    .card{
+      position:absolute;
+      width:var(--card-w);
+      height:var(--card-h);
+      left:50%;
+      top:50%;
+      transform-style:preserve-3d;
+      transform-origin:center center;
+      margin-left: calc(var(--card-w) / -2);
+      margin-top: calc(var(--card-h) / -2);
+      transition: transform 600ms cubic-bezier(.2,.9,.2,1), box-shadow 250ms;
+      border-radius:16px;
+      overflow:hidden;
+      box-shadow: 0 18px 40px rgba(2,6,23,0.6);
+      cursor:pointer;
+      background:#111;
+      backface-visibility: hidden;
+    }
+
+    /* 图片设置 */
+    .card img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      transform: translateZ(40px) scale(1.02);
+      transition: transform 450ms;
+      will-change: transform;
+    }
+
+    /* 卡片正面浮雕效果 */
+    .card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background: linear-gradient(to bottom, rgba(0,0,0,0) 30%, rgba(0,0,0,0.25) 70%);
+    }
+
+    /* 鼠标悬停时微放大且倾斜（3D）*/
+    .card:hover{
+      transform: translateZ(80px) scale(1.06);
+      box-shadow: 0 28px 60px rgba(2,6,23,0.75);
+      z-index:100;
+    }
+    .card:hover img{
+      transform: translateZ(80px) scale(1.08);
+    }
+
+    /* 弹出查看（放大） */
+    .card.active{
+      transition: transform 450ms cubic-bezier(.2,.9,.2,1);
+      transform: translateZ(220px) scale(1.22) !important;
+      z-index:999;
+    }
+
+    /* 控制按钮 */
+    .controls{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .btn{
+      background: rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.06);
+      color:#e6eef8;
+      padding:8px 12px;
+      border-radius:8px;
+      cursor:pointer;
+      font-size:13px;
+      backdrop-filter: blur(6px);
+    }
+    .btn:active{ transform: translateY(1px); }
+
+    /* 小提示角标 */
+    .badge{
+      font-size:12px;
+      color:#94a3b8;
+    }
+
+    /* 使环形排布：我们会通过 JS 设置每个 card 的 rotateY */
+    @keyframes spin{
+      from{ transform: rotateY(0deg); }
+      to{ transform: rotateY(360deg); }
+    }
+
+    /* 响应式 */
+    @media (max-width:900px){
+      :root{ --card-w: 300px; --card-h:200px; --radius:360px; }
+      .stage{ width:420px; height:380px; }
+    }
+    @media (max-width:480px){
+      :root{ --card-w: 260px; --card-h:170px; --radius:300px; --duration:20s; }
+      .stage{ width:330px; height:320px; }
+      h1{ font-size:18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>3D 环形图片画廊 · 6 张随机图片</h1>
+    <p class="sub">自动旋转（悬停暂停），点击图片放大。图片来自 picsum.photos（可直接显示）。</p>
+
+    <div class="stage" id="stage" aria-hidden="false">
+      <div class="carousel" id="carousel">
+        <!-- 下面的 card 会由 JS 动态生成 -->
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn" id="toggleSpin">暂停旋转</button>
+      <button class="btn" id="prev">◀ 上一张</button>
+      <button class="btn" id="next">下一张 ▶</button>
+      <div class="badge" id="note">提示：移动鼠标到图片上可暂停并倾斜查看，或点击图片放大。</div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      // 6 张可直接显示的图片（picsum.photos）
+      const imgs = [
+        'https://picsum.photos/id/1015/900/600', // 山
+        'https://picsum.photos/id/1021/900/600', // 海
+        'https://picsum.photos/id/1025/900/600', // 牦牛（动物）
+        'https://picsum.photos/id/1035/900/600', // 路
+        'https://picsum.photos/id/1043/900/600', // 建筑
+        'https://picsum.photos/id/1050/900/600'  // 树木
+      ];
+
+      const count = imgs.length;
+      const carousel = document.getElementById('carousel');
+      const radius = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--radius')) || 520;
+      const cardW = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--card-w')) || 360;
+      let angleStep = 360 / count;
+      let currentIndex = 0;
+      let autoRotate = true;
+
+      // 创建卡片并定位在环形上
+      imgs.forEach((src, i)=>{
+        const card = document.createElement('div');
+        card.className = 'card';
+        // 计算每张卡片绕 Y 轴的位置
+        const rotateY = i * angleStep;
+        // translateZ 将卡片推出屏幕形成环形
+        card.style.transform = `rotateY(${rotateY}deg) translateZ(${radius}px)`;
+        // 添加图片
+        const img = document.createElement('img');
+        img.alt = `随机图片 ${i+1}`;
+        img.src = src;
+        card.appendChild(img);
+        // 点击切换为 active（放大）
+        card.addEventListener('click', (ev)=>{
+          // 单击激活当前卡片 — 收起其他 active
+          if(card.classList.contains('active')){
+            card.classList.remove('active');
+          } else {
+            document.querySelectorAll('.card.active').forEach(c=>c.classList.remove('active'));
+            card.classList.add('active');
+            // 如果点击某张图片，把旋转对齐到该图片（更直观）
+            rotateToIndex(i);
+          }
+          ev.stopPropagation();
+        });
+
+        // 鼠标移动时提供微倾斜（tilt）效果
+        card.addEventListener('mousemove', (e)=>{
+          const rect = card.getBoundingClientRect();
+          const px = (e.clientX - rect.left) / rect.width; // 0..1
+          const py = (e.clientY - rect.top) / rect.height;
+          const tiltX = (py - 0.5) * 12; // 倾斜幅度
+          const tiltY = (px - 0.5) * -12;
+          card.style.transform = `rotateY(${rotateY}deg) translateZ(${radius}px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+        });
+        card.addEventListener('mouseleave', ()=>{
+          // 恢复原始 transform
+          card.style.transform = `rotateY(${rotateY}deg) translateZ(${radius}px)`;
+        });
+
+        carousel.appendChild(card);
+      });
+
+      // 旋转到某索引，使该图片面向前方
+      function rotateToIndex(idx){
+        currentIndex = ((idx % count) + count) % count;
+        const angle = currentIndex * angleStep;
+        // 逆转角度因为我们要把第 idx 张转到 0deg 面向用户
+        carousel.style.transform = `rotateY(${-angle}deg)`;
+      }
+
+      // 下一张 / 上一张 控制
+      document.getElementById('next').addEventListener('click', ()=>{
+        rotateToIndex(currentIndex + 1);
+        pauseRotationShort();
+      });
+      document.getElementById('prev').addEventListener('click', ()=>{
+        rotateToIndex(currentIndex - 1);
+        pauseRotationShort();
+      });
+
+      // 切换自动旋转
+      const toggleBtn = document.getElementById('toggleSpin');
+      toggleBtn.addEventListener('click', ()=>{
+        autoRotate = !autoRotate;
+        updateSpinState();
+      });
+
+      function updateSpinState(){
+        if(autoRotate){
+          carousel.style.animationPlayState = 'running';
+          toggleBtn.textContent = '暂停旋转';
+        } else {
+          carousel.style.animationPlayState = 'paused';
+          toggleBtn.textContent = '开始旋转';
+        }
+      }
+
+      // 当用户与画廊交互时短暂暂停自动旋转（更友好）
+      let pauseTimer = null;
+      function pauseRotationShort(){
+        autoRotate = false;
+        updateSpinState();
+        clearTimeout(pauseTimer);
+        pauseTimer = setTimeout(()=>{
+          autoRotate = true;
+          updateSpinState();
+        }, 5000); // 5 秒后恢复
+      }
+
+      // 全局点击取消 active（放大）
+      document.addEventListener('click', (e)=>{
+        if(!e.target.closest('.card')){
+          document.querySelectorAll('.card.active').forEach(c=>c.classList.remove('active'));
+        }
+      });
+
+      // 鼠标悬停全局时暂停自动旋转（更直觉）
+      const stage = document.getElementById('stage');
+      stage.addEventListener('mouseenter', ()=>{ pauseRotationShort(); });
+      stage.addEventListener('touchstart', ()=>{ pauseRotationShort(); }, {passive:true});
+
+      // 小的自动旋转逻辑（仅在 autoRotate 为 true 时缓慢调整当前Index，使 carousel 看起来连续）
+      let lastTick = performance.now();
+      function tick(now){
+        const dt = now - lastTick;
+        lastTick = now;
+        if(autoRotate){
+          // 手动推进 currentIndex 微小角度 (取决于动画)
+          // 这里我们不改变 currentIndex 整数，只是改变 carousel 的 CSS rotateY 来产生更流畅的控制
+          // 获取当前 transform rotateY，如果没有则让动画运行（CSS 的动画负责主旋转）
+          // 为了避免冲突，我们不在 JS 中持续修改旋转（CSS 动画已在运作）。
+        }
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+
+      // 初始对齐：把第 0 张面向前方
+      rotateToIndex(0);
+
+      // 触摸滑动支持：左右滑动切换图片（移动设备）
+      let startX = null;
+      stage.addEventListener('touchstart', (e)=>{
+        startX = e.touches[0].clientX;
+      }, {passive:true});
+      stage.addEventListener('touchend', (e)=>{
+        if(startX === null) return;
+        const endX = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientX : null;
+        if(endX===null) { startX = null; return; }
+        const diff = endX - startX;
+        if(Math.abs(diff) > 30){
+          if(diff < 0) rotateToIndex(currentIndex + 1);
+          else rotateToIndex(currentIndex - 1);
+          pauseRotationShort();
+        }
+        startX = null;
+      }, {passive:true});
+
+      // window resize 时重新读取 radius（如果你用 :root CSS 变量在响应式中调整）
+      window.addEventListener('resize', ()=>{
+        // 重新计算卡片位置 based on radius variable (optional)
+        // 这里我们直接读取 CSS 变量并重新设置每个 card transform
+        const newRadius = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--radius')) || radius;
+        document.querySelectorAll('.card').forEach((card,i)=>{
+          const rotateY = i * angleStep;
+          // 如果卡片当前处于 hover/tilt/active，则 transform 可能已被 JS 改写，重置为环形位置
+          if(!card.classList.contains('active')){
+            card.style.transform = `rotateY(${rotateY}deg) translateZ(${newRadius}px)`;
+          }
+        });
+      });
+
+    })();
+  </script>
+</body>
+</html>
